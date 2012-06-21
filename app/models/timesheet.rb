@@ -117,8 +117,11 @@ class Timesheet < ActiveRecord::Base
     rescue
       time = nil
     end
-    type = time_out ? "time_in" : "time_out"
-    self.attributes = { "date" => t_date.beginning_of_day, "#{type}" => time }
+
+    type = time_out ? 'time_in' : 'time_out'
+    t_date = time_out ? t_date : date.localtime
+    self.attributes = { "#{type}" => time, "date" => t_date.beginning_of_day }
+
     begin
       if self.save!
         # Time in after manual timeout only if Time in is clicked.
