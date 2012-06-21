@@ -140,7 +140,7 @@ class Timesheet < ActiveRecord::Base
       begin
       TimesheetMailer.invalid_timesheet(employee, self, type, recipient).deliver
       rescue Net::SMTPAuthenticationError, Net::SMTPServerBusy, Net::SMTPSyntaxError, Net::SMTPFatalError, Net::SMTPUnknownError => e
-        errors.add_to_base('Time entry was updated however there was problem with email notification to #{recipient.email}.' + "(#{e.message})")
+        errors[:base] << "Time entry was updated however there was problem with email notification to #{recipient.email}: #{e.message}"
         next
       end
     end
